@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: discoveryserver
+  labels:
+    app: discoveryserver
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: discoveryserver
+  template:
+    metadata:
+      labels:
+        app: discoveryserver
+    spec:
+      containers:
+        - image: springcloud/discoveryserver
+          name: discoveryserver
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: discoveryserver
+  labels:
+    app: discoveryserver
+spec:
+  ports:
+    - name: http
+      port: 8761
+      targetPort: 8761
+  selector:
+    app: discoveryserver

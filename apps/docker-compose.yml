@@ -1,0 +1,37 @@
+version: '3.9'
+
+services:
+  producer:
+    image: apps/producer
+    container_name: apps-producer
+    build:
+      context: ./apps/producer
+      dockerfile: ../Dockerfile
+      args:
+        project_name: producer
+    expose:
+      - 8080
+    ports:
+      - "8080:8080"
+    depends_on:
+      - rabbitmq
+
+#    volumes:
+#      - type: bind
+#        source: ~/.m2
+#        target: /opt/app/static
+
+  consumer:
+    image: apps/consumer
+    container_name: apps-consumer
+    build:
+      context: ./apps/consumer
+      dockerfile: ../Dockerfile
+      args:
+        project_name: consumer
+    depends_on:
+      - rabbitmq
+
+secrets:
+  db-password:
+    file: db/password.txt
